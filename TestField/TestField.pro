@@ -19,14 +19,24 @@ SOURCES += main.cpp\
     levelcontroller.cpp \
     cellbutton.cpp \
     random.cpp \
-    imagecontroller.cpp
+    imagecontroller.cpp \
+    hero/hero.cpp \
+    hero/hunter.cpp \
+    hero/mage.cpp \
+    hero/warrior.cpp \
+    herobutton.cpp
 
 HEADERS  += mainwindowtest.h \
     field.h \
     cell.h \
     levelcontroller.h \
     cellbutton.h \
-    imagecontroller.h
+    imagecontroller.h \
+    hero/hero.h \
+    hero/hunter.h \
+    hero/mage.h \
+    hero/warrior.h \
+    herobutton.h
 
 FORMS    += mainwindowtest.ui
 

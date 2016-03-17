@@ -3,9 +3,11 @@
 #include "QTime"
 #include "cell.h"
 #include <QVector>
+#include <QObject>
 
-class Field
+class Field: public QObject
 {
+    Q_OBJECT
 private:
     QVector<Cell*>* cells;
     int height;
@@ -38,6 +40,8 @@ public:
 
     void start(int i1, int j1, int i2, int j2);
     void destroy(QVector<Cell*>* cells);
+signals:
+    void increaseScore(int score, int type);
 };
 
 #endif // FIELD_H

@@ -15,28 +15,40 @@ void CellButton::paintEvent(QPaintEvent *pe)
     switch (this->type)
     {
         case 0:
-            if (!isHover)
+            if (isHover)
             {
-                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Red);
-            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->RedHover);
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->RedHover);
+            } else if (isClicked)
+            {
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->RedClicked);
+            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Red);
             break;
         case 1:
-            if (!isHover)
+            if (isHover)
             {
-                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Green);
-            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->GreenHover);
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->GreenHover);
+            } else if (isClicked)
+            {
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->GreenClicked);
+            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Green);
             break;
         case 2:
-            if (!isHover)
+            if (isHover)
             {
-                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Blue);
-            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->BlueHover);
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->BlueHover);
+            } else if (isClicked)
+            {
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->BlueClicked);
+            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Blue);
             break;
         case 3:
-            if (!isHover)
+            if (isHover)
             {
-                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Yellow);
-            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->YellowHover);
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->YellowHover);
+            } else if (isClicked)
+            {
+                painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->YellowClicked);
+            } else painter.drawPixmap(0,0,this->width(),this->height(),ImageController::init()->Yellow);
             break;
     }
 }
@@ -44,6 +56,7 @@ void CellButton::paintEvent(QPaintEvent *pe)
 void CellButton::enterEvent(QEvent *event)
 {
     this->isHover = true;
+    if (this->isClicked) this->isHover = false;
     emit repaint();
 }
 
@@ -56,6 +69,14 @@ void CellButton::leaveEvent(QEvent *event)
 void CellButton::UpdateType(int type)
 {
     this->type = type;
+    this->isHover = false;
+    this->isClicked = false;
+    emit repaint();
+}
 
+void CellButton::clickedButton()
+{
+    this->isClicked = true;
+    this->isHover = false;
     emit repaint();
 }

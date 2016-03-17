@@ -21,9 +21,11 @@ public:
     void setType(int type);
     int getI();
     int getJ();
+    void clicked();
 
 signals:
     void updateType(int type);
+    void clickedButton();
 };
 
 #endif // CELL_H

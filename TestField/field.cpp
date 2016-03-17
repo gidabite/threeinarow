@@ -192,6 +192,8 @@ void Field::start(int i1, int j1, int i2, int j2)
     {
         this->getCell(i1,j1)->setType(r2);
         this->getCell(i2,j2)->setType(r1);
+        this->getCell(i1,j1)->clicked();
+        this->getCell(i2,j2)->clicked();
         QVector<Cell*> *cells = new QVector<Cell*>(0);
         cells->append(this->getCell(i1,j1));
         cells->append(this->getCell(i2,j2));
@@ -199,6 +201,10 @@ void Field::start(int i1, int j1, int i2, int j2)
         this->destroy(cells);
         delete cells;
         qDebug() << "YES";
+    } else
+    {
+        this->getCell(i1,j1)->setType(this->getCell(i1,j1)->getType());
+        this->getCell(i2,j2)->setType(this->getCell(i2,j2)->getType());
     }
 }
 
@@ -207,8 +213,10 @@ void Field::destroy(QVector<Cell*>* cells)
     Cell* temp;
     bool p = false;
     QVector<Cell*> *c  = new QVector<Cell*>(0);
+    int csize;
     for (int i = 0; i < cells->count(); i++)
     {
+        csize = c->size();
         temp = cells->at(i);
         int cellI = temp->getI();
         int cellJ = temp->getJ();
@@ -267,16 +275,23 @@ void Field::destroy(QVector<Cell*>* cells)
         if (p)
         {
             c->append(temp);
-        }
+            if (c->size() < 10)
+                emit this->increaseScore(100*(c->size() - csize), temp->getType());
+            else
+                emit this->increaseScore(100*(c->size() - csize)*1.05, temp->getType());
+        } else temp->setType(temp->getType());
     }
     if (c->count() != 0)
     {
         for (int i = 0; i < c->count(); i++)
         {
-            c->at(i)->setType(qrand() % 4);
+            c->at(i)->clicked();
         }
         QThread::sleep(1);
-
+        for (int i = 0; i < c->count(); i++)
+        {
+            c->at(i)->setType(qrand() % 4);
+        }
         destroy(c);
     }
     delete c;

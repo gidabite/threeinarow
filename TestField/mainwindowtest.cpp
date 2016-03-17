@@ -2,6 +2,7 @@
 #include "ui_mainwindowtest.h"
 
 #include "cellbutton.h"
+#include <QLabel>
 #include <QDebug>
 MainWindowTest::MainWindowTest(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +25,8 @@ MainWindowTest::MainWindowTest(QWidget *parent) :
     QTime midnight(0,0,0);
     qsrand(midnight.secsTo(QTime::currentTime()));
     this->field = new Field(this->heightField, this->widthField, this->buttons);
-    this->levelController = new LevelController(5000);
+    this->levelController = new LevelController(50000, this, 0);
+    QObject::connect(this->field, SIGNAL(increaseScore(int,int)), this->levelController, SLOT(increaseScore(int,int)));
 }
 
 MainWindowTest::~MainWindowTest()

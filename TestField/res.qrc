@@ -10,5 +10,15 @@
         <file>image/crystalYellowHover.png</file>
         <file>image/background1.jpg</file>
         <file>image/background2.jpg</file>
+        <file>image/crystalBlueClicked.png</file>
+        <file>image/crystalGreenClicked.png</file>
+        <file>image/crystalRedClicked.png</file>
+        <file>image/crystalYellowClicked.png</file>
+        <file>image/heroPowerHunter.png</file>
+        <file>image/heroPowerMage.png</file>
+        <file>image/heroPowerWarrior.png</file>
+        <file>image/powerClickedHunter.png</file>
+        <file>image/powerClickedMage.png</file>
+        <file>image/powerClickedWarrior.png</file>
     </qresource>
 </RCC>

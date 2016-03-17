@@ -24,6 +24,7 @@ signals:
 
 public slots:
     void UpdateType(int type);
+    void clickedButton();
 };
 
 #endif // CELLBUTTON_H

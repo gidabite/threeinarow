@@ -12,6 +12,7 @@ Cell::Cell(int i, int j, TypeCell t, CellButton* btn)
     this->i = i;
     this->j = j;
     QObject::connect(this, SIGNAL(updateType(int)), btn, SLOT(UpdateType(int)));
+    QObject::connect(this, SIGNAL(clickedButton()), btn, SLOT(clickedButton()));
     emit updateType(t);
     switch(t)
     {
@@ -54,5 +55,10 @@ int Cell::getI()
 int Cell::getJ()
 {
     return this->j;
+}
+
+void Cell::clicked()
+{
+    emit this->clickedButton();
 }
 
