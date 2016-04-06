@@ -1,7 +1,8 @@
 #include "mage.h"
 
-Mage::Mage(int score)
+Mage::Mage(int score, QQuickItem *Root)
 {
+    this->Root = Root;
     this->heroScore = score;
     name = "Маг";
     typeCrystal = 2;
@@ -24,16 +25,8 @@ void Mage::heroPower(int i, int j, Field *field)
             }
         }
     }
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->clicked();
-    }
-    QThread::sleep(1);
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->setType(qrand() % 4);
-    }
+
     emit field->increaseScore(deleteList.size()*100, deleteList.last()->getType());
-    field->destroy(&deleteList);
+    emit destroy(deleteList);
 
 }

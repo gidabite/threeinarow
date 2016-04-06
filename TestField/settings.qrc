@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/settings">
+        <file>image/collections_1.png</file>
+        <file>image/collections_1_hover.png</file>
+        <file>image/collections_2.png</file>
+        <file>image/collections_2_hover.png</file>
+        <file>image/options_1.PNG</file>
+        <file>image/options_1_clicked.png</file>
+    </qresource>
+</RCC>

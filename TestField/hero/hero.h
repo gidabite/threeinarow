@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include "field.h"
+#include "QQuickItem"
+
 class Hero : public QObject
 {
     Q_OBJECT
@@ -11,6 +13,7 @@ protected:
     QString name;
     int currentScore;
     int typeCrystal;
+    QQuickItem *Root;
 
 public:
     explicit Hero();
@@ -20,7 +23,7 @@ public:
     int getTypeCrystal();
     int getHeroScore();
 signals:
-
+    void destroy(QVector<Cell*> deleteList);
 public slots:
 };
 

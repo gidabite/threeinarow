@@ -18,6 +18,8 @@ Hero::Hero()
 void Hero::setCurrentScore(int currScore)
 {
     this->currentScore = currScore;
+    if (this->currentScore == this->heroScore)
+        QMetaObject::invokeMethod(Root, "setActiveHero", Q_ARG(QVariant,true));
 }
 
 int Hero::getCurrentScrore()

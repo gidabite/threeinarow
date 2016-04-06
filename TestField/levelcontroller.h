@@ -10,6 +10,7 @@
 #include "hero/mage.h"
 #include "hero/warrior.h"
 #include "herobutton.h"
+#include "QQuickItem"
 
 class LevelController: public QObject
 {
@@ -19,19 +20,20 @@ private:
     int score;
     int CompleteScore;
     int i1, j1, i2, j2;
-    CellButton *btn1, *btn2;
-    HeroButton* HB;
-    QLabel* label1;
-    QLabel* labelHero;
-    Hero* hero;
+
+    QQuickItem* Root;
 public:
-    LevelController(int cscore, QWidget* window, int classHero);
+    Hero* hero;
+    LevelController(int cscore, QWidget* window, int classHero, QQuickItem* Root);
     ~LevelController();
-    void addCell(CellButton* btn, Field* field);
+    void addCell(int i, int j, Field* field);
     int getCondition();
+    void changeConditionForActivateSkill();
 public slots:
     void increaseScore(int score, int type);
-    void changeConditionForActivateSkill();
+
+signals:
+    void go(int i1, int j1, int i2, int j2);
 
 };
 

@@ -1,7 +1,8 @@
 #include "levelcontroller.h"
 
-LevelController::LevelController(int cscore, QWidget* window, int classHero)
+LevelController::LevelController(int cscore, QWidget* window, int classHero, QQuickItem* Root)
 {
+    this->Root = Root;
     this->i1 = -1;
     this->j1 = -1;
     this->i2 = -1;
@@ -13,80 +14,57 @@ LevelController::LevelController(int cscore, QWidget* window, int classHero)
     switch (classHero)
     {
         case 0:
-            this->hero = new Warrior(1000);
+            this->hero = new Warrior(1000, Root);
             break;
         case 1:
-            this->hero = new Hunter(1000);
+            this->hero = new Hunter(1000, Root);
             break;
         case 2:
-            this->hero = new Mage(1000);
+            this->hero = new Mage(1000, Root);
             break;
     default: break;
     }
 
-    HB = new HeroButton(hero,window);
-    HB->setGeometry(QRect(75,175,300,300));
-    QObject::connect(HB, SIGNAL(clicked(bool)), this, SLOT(changeConditionForActivateSkill()));
-    label1 = new QLabel(window);
-    label1->setGeometry(QRect(0,25,450,25));
-    QPalette* palette = new QPalette();
-    palette->setColor(QPalette::WindowText,Qt::black);
-    label1->setPalette(*palette);
-    QFont font = label1->font();
-    font.setPointSize(20);
-    font.setFamily("Segoe Print");
-    label1->setFont(font);
-    label1->setAlignment(Qt::AlignCenter);
-    label1->setText("Очки: " + QString::number(this->score) + "/" + QString::number(this->CompleteScore));
-
-    labelHero = new QLabel(window);
-    labelHero->setGeometry(QRect(0,50,450,25));
-    labelHero->setPalette(*palette);
-    labelHero->setFont(font);
-    labelHero->setAlignment(Qt::AlignCenter);
-    labelHero->setText("Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore()));
-
+    QMetaObject::invokeMethod(Root, "setHero", Q_ARG(QVariant, hero->getTypeCrystal()));
+    QMetaObject::invokeMethod(Root, "setText1", Q_ARG(QVariant, "Очки: " + QString::number(this->score) + "/" + QString::number(this->CompleteScore)));
+    QMetaObject::invokeMethod(Root, "setText2", Q_ARG(QVariant, "Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore())));
 }
 
 LevelController::~LevelController()
 {
-    if (!this->btn1)
-        delete this->btn1;
-    if (!this->btn2)
-        delete this->btn2;
+
 }
 
-void LevelController::addCell(CellButton* btn, Field* field)
+void LevelController::addCell(int i, int j, Field* field)
 {
-    int i = btn->accessibleName().toInt();
-    int j = i % field->getWidth();
-    i /= field->getWidth();
+
     switch (this->condition)
     {
         case 0:
-            this->i1 = i;
-            this->j1 = j;
-            field->getCell(i,j)->clicked();
-            this->btn1 = btn;
-            this->condition = 1;
-            btn->setStyleSheet(btn->styleSheet() + "; " + QString("border : 5px solid black;"));
+            if (!field->getCell(i,j)->getTrap())
+            {
+                this->i1 = i;
+                this->j1 = j;
+                this->condition = 1;
+            }
             break;
         case 1:
             if ((i == this->i1 - 1 && j == this->j1) || (i == this->i1 + 1 && j == this->j1) || (i == this->i1 && j == this->j1 - 1) || (i == this->i1 && j == this->j1 + 1))
             {
+                if (!field->getCell(i,j)->getTrap())
+                {
                     this->i2 = i;
                     this->j2 = j;
-                    field->getCell(i,j)->clicked();
-                    this->btn2 = btn;
                     this->condition = 0;
-                    btn->setStyleSheet(btn->styleSheet() + "; " + QString("border : 5px solid black;"));
-                    field->start(this->i1, this->j1, this->i2, this->j2);
+                    emit go(this->i1, this->j1, this->i2, this->j2);
+                }
                     break;
             }
             this->condition = 0;
             field->getCell(i1,j1)->setType(field->getCell(i1,j1)->getType());
             break;
         case 2:
+            QMetaObject::invokeMethod(Root, "setActiveHero", Q_ARG(QVariant,false));
             hero->heroPower(i, j, field);
             this->condition = 0;
             break;
@@ -101,7 +79,7 @@ int LevelController::getCondition()
 void LevelController::increaseScore(int score, int type)
 {
     this->score += score;
-    this->label1->setText("Очки: " + QString::number(this->score) + "/" + QString::number(this->CompleteScore));
+    QMetaObject::invokeMethod(Root, "setText1", Q_ARG(QVariant, "Очки: " + QString::number(this->score) + "/" + QString::number(this->CompleteScore)));
 
     if (type == hero->getTypeCrystal())
     {
@@ -110,11 +88,8 @@ void LevelController::increaseScore(int score, int type)
         {
             hero->setCurrentScore(hero->getHeroScore());
         }
-        labelHero->setText("Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore()));
-        emit HB->repaint();
+        QMetaObject::invokeMethod(Root, "setText2", Q_ARG(QVariant, "Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore())));
     }
-
-    emit this->label1->repaint();
 
 }
 
@@ -124,8 +99,7 @@ void LevelController::changeConditionForActivateSkill()
     {
         this->condition = 2;
         this->hero->setCurrentScore(0);
-        labelHero->setText("Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore()));
-        emit HB->repaint();
+        QMetaObject::invokeMethod(Root, "setText2", Q_ARG(QVariant, "Энергия: " + QString::number(this->hero->getCurrentScrore()) + "/" + QString::number(this->hero->getHeroScore())));
     }
 }
 

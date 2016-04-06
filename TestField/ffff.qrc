@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>image/skinBlue.png</file>
+        <file>image/skinBlueBlocked.png</file>
+        <file>image/skinBlueHover.png</file>
+        <file>image/skinGreen.png</file>
+        <file>image/skinGreenBlocked.png</file>
+        <file>image/skinGreenHover.png</file>
+        <file>image/skinRed.png</file>
+        <file>image/skinRedBlocked.png</file>
+        <file>image/skinRedHover.png</file>
+        <file>image/skinYellow.png</file>
+        <file>image/skinYellowBlocked.png</file>
+        <file>image/skinYellowHover.png</file>
+    </qresource>
+</RCC>

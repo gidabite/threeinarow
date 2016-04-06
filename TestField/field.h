@@ -3,18 +3,21 @@
 #include "QTime"
 #include "cell.h"
 #include <QVector>
-#include <QObject>
+#include <QThread>
 
-class Field: public QObject
+class Field: public QThread
 {
     Q_OBJECT
 private:
     QVector<Cell*>* cells;
     int height;
     int width;
+protected:
+      virtual void run();
 public:
     Field();
-    Field(int h, int w, QVector<CellButton*>* buttons);
+    ~Field();
+    Field(int h, int w, QObject* Root);
     Cell* getCell(int h, int w);
     int getHeight();
     int getWidth();
@@ -37,11 +40,18 @@ public:
     QVector<Cell*>* addCellTop(int i, int j, int r);
     QVector<Cell*>* addCellLeft(int i, int j, int r);
     QVector<Cell*>* addCellRight(int i, int j, int r);
+    void exitMe();
 
-    void start(int i1, int j1, int i2, int j2);
-    void destroy(QVector<Cell*>* cells);
+
+public slots:
+     void go(int i1, int j1, int i2, int j2);
+     void destroy(QVector<Cell*> cells);
 signals:
     void increaseScore(int score, int type);
+    void clickedCell(int i, int j);
+    void decSize(int i, int j);
+    void normalSize(int i, int j);
+    void swap(int i1, int j1, int i2, int j2);
 };
 
 #endif // FIELD_H

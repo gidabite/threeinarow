@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/image">
-        <file>image/crystalBlue.png</file>
         <file>image/crystalBlueHover.png</file>
         <file>image/crystalGreen.png</file>
         <file>image/crystalGreenHover.png</file>
@@ -20,5 +19,24 @@
         <file>image/powerClickedHunter.png</file>
         <file>image/powerClickedMage.png</file>
         <file>image/powerClickedWarrior.png</file>
+        <file>image/crystalBlue.png</file>
+        <file>image/crystalBlueBlockedLow.png</file>
+        <file>image/crystalGreenBlockedLow.png</file>
+        <file>image/crystalRedBlockedLow.png</file>
+        <file>image/crystalYellowBlockedLow.png</file>
+        <file>image/crystalBlueBlocked.png</file>
+        <file>image/crystalGreenBlocked.png</file>
+        <file>image/crystalRedBlocked.png</file>
+        <file>image/crystalYellowBlocked.png</file>
+        <file>image/button_1.png</file>
+        <file>image/buttonClicked_1.png</file>
+        <file>image/mainMenu3.png</file>
+        <file>image/button_1_blocked.png</file>
+        <file>image/options_1.PNG</file>
+        <file>image/options_1_clicked.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>Cell.qml</file>
+        <file>Field.qml</file>
     </qresource>
 </RCC>

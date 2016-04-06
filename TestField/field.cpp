@@ -2,12 +2,22 @@
 #include <QDebug>
 #include <QThread>
 
+void Field::run()
+{
+    this->exec();
+}
+
 Field::Field()
 {
 
 }
 
-Field::Field(int h, int w, QVector<CellButton*>* buttons)
+Field::~Field()
+{
+    delete cells;
+}
+
+Field::Field(int h, int w, QObject* Root)
 {
     this->height = h;
     this->width = w;
@@ -27,7 +37,7 @@ Field::Field(int h, int w, QVector<CellButton*>* buttons)
                 isChoose &=!isComboLeft(i,j,r);
                 isChoose &=!isComboTop(i,j,r);
             } while (!isChoose);
-            this->cells->append(new Cell(i, j, (TypeCell)r, buttons->at(i*w+j)));
+            this->cells->append(new Cell(i, j, (TypeCell)r, Root));
         }
     }
 }
@@ -143,6 +153,11 @@ QVector<Cell *> *Field::addCellRight(int i, int j, int r)
     return c;
 }
 
+void Field::exitMe()
+{
+    this->exit();
+}
+
 QVector<Cell *>* Field::addCellBottom(int i, int j, int r)
 {
     QVector<Cell *> *c = new QVector<Cell *>(0);
@@ -157,7 +172,7 @@ QVector<Cell *>* Field::addCellBottom(int i, int j, int r)
     return c;
 }
 
-void Field::start(int i1, int j1, int i2, int j2)
+void Field::go(int i1, int j1, int i2, int j2)
 {
     bool p = false;
     int r1 = this->getCell(i1, j1)->getType();
@@ -192,13 +207,15 @@ void Field::start(int i1, int j1, int i2, int j2)
     {
         this->getCell(i1,j1)->setType(r2);
         this->getCell(i2,j2)->setType(r1);
-        this->getCell(i1,j1)->clicked();
-        this->getCell(i2,j2)->clicked();
+        emit swap(i1,j1,i2,j2);
+        QThread::sleep(1);
+        //emit clickedCell(i1,j1);
+        //emit clickedCell(i2,j2);
         QVector<Cell*> *cells = new QVector<Cell*>(0);
         cells->append(this->getCell(i1,j1));
         cells->append(this->getCell(i2,j2));
         QThread::sleep(1);
-        this->destroy(cells);
+        this->destroy(*cells);
         delete cells;
         qDebug() << "YES";
     } else
@@ -208,16 +225,38 @@ void Field::start(int i1, int j1, int i2, int j2)
     }
 }
 
-void Field::destroy(QVector<Cell*>* cells)
+void Field::destroy(QVector<Cell*> cells)
 {
+    if (cells.size() != 2)
+    {
+        for (int i = 0; i < cells.count(); i++)
+        {
+            emit clickedCell(cells.at(i)->getI(),cells.at(i)->getJ());
+        }
+        QThread::sleep(1);
+        for (int i = 0; i < cells.count(); i++)
+        {
+            emit decSize(cells.at(i)->getI(),cells.at(i)->getJ());
+        }
+        QThread::sleep(1);
+        for (int i = 0; i < cells.count(); i++)
+        {
+            cells.at(i)->setType(qrand() % 4);
+        }
+        for (int i = 0; i < cells.count(); i++)
+        {
+            emit normalSize(cells.at(i)->getI(),cells.at(i)->getJ());
+        }
+        QThread::usleep(1);
+    }
     Cell* temp;
     bool p = false;
     QVector<Cell*> *c  = new QVector<Cell*>(0);
     int csize;
-    for (int i = 0; i < cells->count(); i++)
+    for (int i = 0; i < cells.count(); i++)
     {
         csize = c->size();
-        temp = cells->at(i);
+        temp = cells.at(i);
         int cellI = temp->getI();
         int cellJ = temp->getJ();
         int cellType = temp->getType();
@@ -283,16 +322,7 @@ void Field::destroy(QVector<Cell*>* cells)
     }
     if (c->count() != 0)
     {
-        for (int i = 0; i < c->count(); i++)
-        {
-            c->at(i)->clicked();
-        }
-        QThread::sleep(1);
-        for (int i = 0; i < c->count(); i++)
-        {
-            c->at(i)->setType(qrand() % 4);
-        }
-        destroy(c);
+        destroy(*c);
     }
     delete c;
 }

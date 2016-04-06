@@ -6,9 +6,12 @@
 
 class Mage : public Hero
 {
+    Q_OBJECT
 public:
-    Mage(int score);
+    Mage(int score, QQuickItem *Root);
     void heroPower(int i, int j, Field* field);
+signals:
+    void destroy(QVector<Cell*> deleteList);
 };
 
 #endif // MAGE_H

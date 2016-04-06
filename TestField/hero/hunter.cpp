@@ -1,10 +1,10 @@
 #include "hunter.h"
 #include "cell.h"
-#include "QVector"
 
 
-Hunter::Hunter(int score)
+Hunter::Hunter(int score, QQuickItem *Root)
 {
+    this->Root = Root;
     this->heroScore = score;
     name = "Охотник";
     typeCrystal = 1;
@@ -48,16 +48,7 @@ void Hunter::heroPower(int i, int j, Field *field)
     }
     deleteList.append(field->getCell(i,j));
 
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->clicked();
-    }
-    QThread::sleep(1);
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->setType(qrand() % 4);
-    }
     emit field->increaseScore(deleteList.size()*100, deleteList.last()->getType());
-    field->destroy(&deleteList);
+    emit destroy(deleteList);
 
 }

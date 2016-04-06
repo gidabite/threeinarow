@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui declarative
+QT       += core gui quick multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -42,6 +42,12 @@ FORMS    += mainwindowtest.ui
 
 
 RESOURCES += \
-    res.qrc
+    res.qrc \
+    music.qrc \
+    settings.qrc \
+    ffff.qrc
 
-DISTFILES +=
+DISTFILES += \
+    ../Users/Павел/Desktop/TestField/Cell.qml \
+    Field.qml \
+    Cell.qml

@@ -1,7 +1,8 @@
 #include "warrior.h"
 
-Warrior::Warrior(int score)
+Warrior::Warrior(int score, QQuickItem *Root)
 {
+    this->Root = Root;
     this->heroScore = score;
     name = "Воин";
     typeCrystal = 0;
@@ -23,16 +24,8 @@ void Warrior::heroPower(int i, int j, Field *field)
             }
         }
     }
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->clicked();
-    }
-    QThread::sleep(1);
-    for (int i = 0; i < deleteList.size(); i++)
-    {
-        deleteList.at(i)->setType(qrand() % 4);
-    }
+
     emit field->increaseScore(deleteList.size()*100, deleteList.last()->getType());
-    field->destroy(&deleteList);
+    emit destroy(deleteList);
 
 }
